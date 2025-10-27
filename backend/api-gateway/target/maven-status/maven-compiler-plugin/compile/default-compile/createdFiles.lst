@@ -1,0 +1,4 @@
+com\todo\gateway\filter\JwtAuthenticationFilter.class
+com\todo\gateway\controller\FallbackController.class
+com\todo\gateway\ApiGatewayApplication.class
+com\todo\gateway\filter\JwtAuthenticationFilter$Config.class

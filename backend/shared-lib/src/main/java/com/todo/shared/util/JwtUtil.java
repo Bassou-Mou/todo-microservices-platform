@@ -1,42 +1,32 @@
 package com.todo.shared.util;
 
-
-//classes de la librairie JJWT
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
-// Structure d'un JWT : HEADER.PAYLOAD.SIGNATURE
-
-
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret:mySecretKeyForJWTTokenGenerationThatIsLongEnough}")
+    @Value("${jwt.secret:mySecretKeyForJWTTokenGenerationThatIsLongEnoughForHS256Algorithm}")
     private String secret;
 
     @Value("${jwt.expiration:86400000}") // 24 hours
     private Long expiration;
 
-    // Créer la Clé de Signature
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+    private Key getSigningKey() {
+        byte[] keyBytes = secret.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Méthodes d'Extraction - Lire les Données du Token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -44,7 +34,7 @@ public class JwtUtil {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-            //│ Méthode GÉNÉRIQUE qui peut extraire N'IMPORTE QUELLE claim  │
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -67,6 +57,10 @@ public class JwtUtil {
         return createToken(claims, username);
     }
 
+    public String generateToken(String username, Map<String, Object> additionalClaims) {
+        return createToken(additionalClaims, username);
+    }
+
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -84,10 +78,10 @@ public class JwtUtil {
 
     public Boolean validateToken(String token) {
         try {
+            extractAllClaims(token);
             return !isTokenExpired(token);
         } catch (Exception e) {
             return false;
         }
     }
-
 }

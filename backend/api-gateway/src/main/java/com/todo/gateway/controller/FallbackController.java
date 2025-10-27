@@ -24,10 +24,10 @@ public class FallbackController {
         response.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(response)
+                .body(response);
     }
     @GetMapping("/todo-service")
-    public ResponseEntity <Map<String, Object>> userServicesFallBack(){
+    public ResponseEntity <Map<String, Object>> todoServicesFallBack(){
         Map<String, Object> response = new HashMap<>();
         response.put("success", false);
         response.put("message", "TODO Service is temporarily unavailable. Please try again later.");
@@ -35,6 +35,6 @@ public class FallbackController {
         response.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(response)
+                .body(response);
     }
 }

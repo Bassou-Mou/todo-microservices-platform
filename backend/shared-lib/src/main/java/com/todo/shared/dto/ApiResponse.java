@@ -20,23 +20,23 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> success(T data){
         return ApiResponse.<T>builder()
                 .success(true)
-                .date(data)
-                .timestamp(LocalDataTime.now())
-                .build()
+                .data(data)
+                .timestamp(LocalDateTime.now())
+                .build();
     }
-    public static <T> ApiResponse<T> success(string message, T data){
+    public static <T> ApiResponse<T> success(String message, T data){
         return ApiResponse.<T>builder()
                 .success(true)
                 .message(message)
                 .data(data)
-                .timestamp(LocalDataTime.now())
-                .build()
+                .timestamp(LocalDateTime.now())
+                .build();
     }
     public static <T> ApiResponse<T> erreur(String message){
         return  ApiResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .timestamp(LocalDataTime.now())
-                .build()
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 }
